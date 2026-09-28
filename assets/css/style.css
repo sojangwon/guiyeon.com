@@ -219,6 +219,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   z-index: 20;
   view-transition-name: site-head;
   transition: transform 450ms var(--ease-ui), background-color 300ms ease;
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 .site-head.is-scrolled { background-color: rgba(17, 17, 16, 0.94); }
 .site-head.is-scrolled .wrap { border-bottom-color: transparent; }

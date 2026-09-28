@@ -547,19 +547,33 @@
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-    // 머리: 내려가면 숨고, 올리면 나타납니다
+    // 머리: 내려가면 숨고, 올리면 나타납니다.
+    // 휴대폰은 주소창이 줄고 늘 때와 화면 끝에서 튕길 때 스크롤 값이 조금씩 흔들리므로,
+    // 한 방향으로 충분히 움직였을 때만 바꿉니다 (내려갈 때 80px, 올라올 때 40px).
     var head = document.querySelector(".site-head");
-    var lastY = window.scrollY;
+    var lastY = Math.max(0, window.scrollY);
+    var travel = 0;
+    var scrolled = null, hidden = false, queued = false;
+    function setScrolled(v) { if (v !== scrolled) { scrolled = v; head.classList.toggle("is-scrolled", v); } }
+    function setHidden(v) { if (v !== hidden) { hidden = v; head.classList.toggle("is-hidden", v); } }
     function onScroll() {
-      var y = window.scrollY;
-      if (head && !head.classList.contains("is-open")) {
-        head.classList.toggle("is-scrolled", y > 40);
-        head.classList.toggle("is-hidden", y > 240 && y > lastY + 2);
-        if (y < lastY - 2) head.classList.remove("is-hidden");
-      }
+      queued = false;
+      if (!head || head.classList.contains("is-open")) return;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var y = Math.min(Math.max(0, window.scrollY), Math.max(0, max));
+      var d = y - lastY;
       lastY = y;
+      setScrolled(y > 40);
+      if (y < 120) { travel = 0; setHidden(false); return; }
+      if (d === 0) return;
+      if ((d > 0 && travel < 0) || (d < 0 && travel > 0)) travel = 0;
+      travel += d;
+      if (travel > 80) setHidden(true);
+      else if (travel < -40) setHidden(false);
     }
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", function () {
+      if (!queued) { queued = true; requestAnimationFrame(onScroll); }
+    }, { passive: true });
     onScroll();
 
     // 페이지 전환: 누른 작품 사진이 상세 페이지 사진으로 이어집니다
