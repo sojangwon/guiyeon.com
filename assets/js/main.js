@@ -407,12 +407,39 @@
         var mail = document.querySelector("[data-mail]");
         mail.href = "mailto:" + S.email + "?subject=" + encodeURIComponent("[구매 신청] " + iw.id + " " + iw.title) +
           "&body=" + encodeURIComponent(body);
-
-        form.hidden = true;
         var done = document.querySelector(".done");
-        done.classList.add("is-shown");
-        done.querySelector("h2").focus();
-        location.href = mail.href;
+        var submit = form.querySelector("[type=submit]");
+        var status = form.querySelector("[data-status]");
+
+        function finish(viaSheet) {
+          form.hidden = true;
+          done.querySelector("[data-done-sheet]").hidden = !viaSheet;
+          done.querySelector("[data-done-mail]").hidden = viaSheet;
+          done.classList.add("is-shown");
+          done.querySelector("h2").focus();
+          if (!viaSheet) location.href = mail.href;
+        }
+
+        // 구글 시트 주소가 있으면 시트로 보내고, 없으면 메일 앱을 엽니다
+        if (!S.inquiryEndpoint) { finish(false); return; }
+        submit.disabled = true;
+        submit.textContent = "보내는 중";
+        status.textContent = "";
+        var data = new URLSearchParams();
+        ["work", "name", "phone", "how", "address", "note", "website"].forEach(function (k) { data.append(k, f.get(k) || ""); });
+        data.append("page", location.href);
+        fetch(S.inquiryEndpoint, { method: "POST", body: data })
+          .then(function (r) { return r.json(); })
+          .then(function (res) {
+            if (!res || !res.ok) throw new Error(res && res.error);
+            finish(true);
+          })
+          .catch(function () {
+            submit.disabled = false;
+            submit.textContent = "다시 보내기";
+            status.innerHTML = '신청서를 보내지 못했습니다. 잠시 뒤 다시 보내 주시거나, <a href="' + esc(mail.href) +
+              '" style="text-decoration:underline;text-underline-offset:4px">메일로 신청해 주십시오</a>.';
+          });
       });
     }
   }

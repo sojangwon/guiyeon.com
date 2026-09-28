@@ -41,12 +41,15 @@
       </fieldset>
       <label><span class="field">주소</span><input name="address" autocomplete="street-address" placeholder="배송을 고르셨다면 적어 주십시오"></label>
       <label><span class="field">남기실 말</span><textarea name="note" placeholder="놓을 자리, 선물 여부 등"></textarea></label>
+      <label class="hp" aria-hidden="true">비워 두십시오<input name="website" tabindex="-1" autocomplete="off"></label>
       <div><button class="btn" type="submit">신청서 보내기</button></div>
-      <p class="small" style="margin:0">보내기를 누르면 메일 앱이 열리고 신청 내용이 채워집니다. 메일을 보내면 신청이 끝납니다.</p>
+      <p class="err" data-status role="alert" style="margin:0"></p>
+      <p class="small" style="margin:0">보내 주신 내용은 구매 안내에만 씁니다.</p>
     </form>
     <div class="done" aria-live="polite">
-      <h2 class="title-md" tabindex="-1">신청서를 작성했습니다.</h2>
-      <p class="small" style="margin-top:16px">열린 메일을 보내 주시면 신청이 접수됩니다. 메일 앱이 열리지 않았다면 <a data-mail href="#" style="text-decoration:underline;text-underline-offset:4px">여기를 눌러 다시 여십시오</a>.</p>
+      <h2 class="title-md" tabindex="-1">신청을 받았습니다.</h2>
+      <p class="small" style="margin-top:16px" data-done-sheet>아래 계좌로 입금해 주시면 확인 후 연락드립니다. 신청하신 작품은 입금 전까지 다른 분께 안내하지 않습니다. <span class="todo">[확인 필요]</span></p>
+      <p class="small" style="margin-top:16px" data-done-mail hidden>열린 메일을 보내 주시면 신청이 접수됩니다. 메일 앱이 열리지 않았다면 <a data-mail href="#" style="text-decoration:underline;text-underline-offset:4px">여기를 눌러 다시 여십시오</a>.</p>
       <div class="notice" style="margin-top:40px">
         <p class="field">입금 계좌</p>
         <dl class="facts" data-bank></dl>

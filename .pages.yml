@@ -93,3 +93,4 @@ content:
           - { name: account, label: 계좌번호, type: string }
           - { name: holder, label: 예금주, type: string }
       - { name: notice, label: "맨 아래 안내 문구 (비우면 사라집니다)", type: string }
+      - { name: inquiryEndpoint, label: "구매 신청을 받을 구글 시트 주소 (Apps Script 웹 앱 URL)", type: string }
