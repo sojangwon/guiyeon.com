@@ -982,3 +982,70 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .philosophy__plate { margin: 0 calc(var(--gutter) * -1) 36px; }
   .pair__a, .pair__b { grid-column: 1 / -1; margin-top: 0; }
 }
+
+/* ---------- 한글 글자: 자간을 좁히고 크기를 한 단계 낮춤 ----------
+   영문 대문자 라벨(.field, .en, 메뉴, 버튼)과 GUIYEON 워드마크는 각자 자간을 따로 가지므로 영향이 없습니다. */
+body { letter-spacing: -0.015em; }
+.title-lg { font-size: clamp(28px, 3.4vw, 52px); letter-spacing: -0.035em; }
+.detail .title-lg { font-size: clamp(26px, 2.6vw, 40px); }
+.channels .title-lg { font-size: clamp(26px, 3vw, 44px); }
+.title-md { font-size: clamp(20px, 1.7vw, 24px); letter-spacing: -0.03em; }
+.prose p { font-size: clamp(16px, 1.2vw, 18px); letter-spacing: -0.03em; line-height: 1.7; }
+.lede p { font-size: clamp(19px, 1.85vw, 27px); letter-spacing: -0.035em; }
+.hero__motto { font-size: clamp(17px, 1.45vw, 21px); letter-spacing: -0.03em; }
+.work__title { font-size: 17px; letter-spacing: -0.03em; }
+.log__what { font-size: 17px; letter-spacing: -0.02em; }
+.log__line { font-size: 16px; letter-spacing: -0.03em; }
+.observe li { font-size: 16px; letter-spacing: -0.03em; }
+.steps li { font-size: 16px; letter-spacing: -0.03em; }
+.piece .prose p, .detail .prose p, .entry .text-col .prose p { font-size: 16px; }
+.small { font-size: 13.5px; }
+@media (max-width: 720px) {
+  .lede p { font-size: 18px; }
+  .prose p { font-size: 16px; }
+}
+
+/* ---------- 첫 화면 오른쪽: 천천히 바뀌는 근접 사진 액자 (데스크톱) ---------- */
+.hero__frames {
+  grid-column: 8 / span 5;
+  align-self: center;
+  justify-self: end;
+  position: relative;
+  width: min(100%, 440px);
+  aspect-ratio: 4 / 5;
+  max-height: calc(100% - 140px);
+  margin-top: 60px;
+  background: var(--ink-raised);
+  overflow: hidden;
+  animation: rise 1800ms 300ms var(--ease) both;
+}
+.hero__frames img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity 2200ms ease, transform 9000ms linear;
+}
+.hero__frames img.is-on { opacity: 1; transform: scale(1); }
+.hero__cap {
+  position: absolute;
+  left: 0; right: 0; bottom: -34px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+}
+.hero__frames { overflow: visible; }
+.hero__frames .clip { position: absolute; inset: 0; overflow: hidden; }
+@media (max-width: 960px) { .hero__frames { display: none; } }
+@media (prefers-reduced-motion: reduce) { .hero__frames img { transition: opacity 600ms ease; transform: none; } }
+/* 액자 위치 보정: 글의 아래선과 맞추고 메뉴와 거리를 둡니다 */
+.hero { height: min(88svh, 58vw); min-height: 600px; }
+.hero__frames {
+  align-self: end;
+  width: auto;
+  height: clamp(300px, calc(100% - 270px), 520px);
+  max-height: none;
+  margin: 0 0 118px;
+}

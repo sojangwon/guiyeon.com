@@ -138,6 +138,38 @@
   /* ---------- HOME ---------- */
 
   if (page === "home") {
+    // 첫 화면 액자: 가까이서 본 나무의 부분들이 천천히 바뀝니다
+    var frames = document.querySelector("[data-frames]");
+    if (frames && window.matchMedia("(min-width: 961px)").matches) {
+      var shots = [
+        ["images/works/gy-005.jpg", "밑동"],
+        ["images/works/gy-002.jpg", "겨울 잔가지"],
+        ["images/works/gy-006.jpg", "뿌리와 이끼"],
+        ["images/works/gy-001-b.jpg", "철사를 건 가지"],
+        ["images/works/gy-003-b.jpg", "새잎"],
+        ["images/works/gy-002-b.jpg", "줄기"]
+      ];
+      var clip = frames.querySelector(".clip");
+      clip.innerHTML = shots.map(function (x) { return '<img src="' + x[0] + '" alt="" decoding="async">'; }).join("");
+      var imgs = clip.querySelectorAll("img");
+      var cap = frames.querySelector("[data-frame-cap]");
+      var num = frames.querySelector("[data-frame-n]");
+      var k = 0;
+      function showFrame() {
+        imgs.forEach(function (im, j) { im.classList.toggle("is-on", j === k); });
+        cap.textContent = shots[k][1];
+        num.textContent = pad(k + 1) + " / " + pad(shots.length);
+      }
+      showFrame();
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        setInterval(function () {
+          if (document.hidden) return;
+          k = (k + 1) % shots.length;
+          showFrame();
+        }, 7000);
+      }
+    }
+
     var sel = document.querySelector("[data-selected]");
     if (sel) sel.innerHTML = D.works.slice(0, 4).map(function (w) { return workCard(w); }).join("");
 
