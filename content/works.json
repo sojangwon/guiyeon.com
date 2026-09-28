@@ -1,0 +1,237 @@
+{
+  "works": [
+    {
+      "id": "GY-001",
+      "title": "기울어 선 향나무",
+      "species": "향나무",
+      "speciesEn": "Juniper",
+      "since": 1998,
+      "year": 2026,
+      "size": "H 42 × W 55 cm",
+      "status": "Available",
+      "image": "images/works/gy-001.jpg",
+      "summary": "줄기가 왼쪽으로 기울어 자란 나무입니다. 기울기를 바로잡지 않았습니다.",
+      "intent": "나무의 방향을 정하기보다, 이미 가지고 있는 방향을 찾았습니다. 무게는 오른쪽 가지 하나로 받쳤습니다.",
+      "sale": {
+        "state": "AVAILABLE",
+        "price": "[확인 필요]",
+        "care": "쉬움 · 볕이 드는 창가"
+      },
+      "log": [
+        {
+          "date": "2026.09",
+          "text": "철사를 걸었습니다. 오른쪽 가지 끝을 3cm 내렸습니다."
+        },
+        {
+          "date": "2025.04",
+          "text": "분갈이. 뿌리의 3분의 1을 정리했습니다."
+        },
+        {
+          "date": "2023.10",
+          "text": "왼쪽 가지를 잘랐습니다. 두 시간을 고민했습니다."
+        },
+        {
+          "date": "2021.03",
+          "text": "처음 들였습니다. 방향을 정하지 않고 1년을 지켜보기로 했습니다."
+        }
+      ]
+    },
+    {
+      "id": "GY-002",
+      "title": "겨울 느티",
+      "species": "느티나무",
+      "speciesEn": "Zelkova",
+      "since": 2009,
+      "year": 2025,
+      "size": "H 38 × W 30 cm",
+      "status": "Private Collection",
+      "image": "images/works/gy-002.jpg",
+      "summary": "잎이 진 뒤에 완성되는 나무입니다. 잔가지의 밀도가 수형입니다.",
+      "intent": "빗자루 모양의 수형입니다. 잔가지 하나하나의 간격을 맞추는 데 네 해가 걸렸습니다.",
+      "log": [
+        {
+          "date": "2025.12",
+          "text": "잎이 모두 졌습니다. 잔가지 간격을 기록했습니다."
+        },
+        {
+          "date": "2024.06",
+          "text": "새순을 두 마디에서 잘랐습니다."
+        },
+        {
+          "date": "2022.02",
+          "text": "굵은 가지 두 개를 정리했습니다."
+        }
+      ]
+    },
+    {
+      "id": "GY-003",
+      "title": "가을이 늦게 오는 단풍",
+      "species": "단풍나무",
+      "speciesEn": "Maple",
+      "since": 2012,
+      "year": 2026,
+      "size": "H 34 × W 40 cm",
+      "status": "Available",
+      "image": "images/works/gy-003.jpg",
+      "summary": "다른 단풍보다 열흘 늦게 물이 듭니다. 이유는 아직 모릅니다.",
+      "intent": "나무 하나의 계절을 따로 기록하고 있습니다. 작은 화분 안에서도 계절은 계속 흐릅니다.",
+      "sale": {
+        "state": "RESERVED",
+        "price": "[확인 필요]",
+        "care": "보통 · 여름 한낮 볕을 피해야 합니다"
+      },
+      "log": [
+        {
+          "date": "2026.07",
+          "text": "분갈이. 흙의 배수를 바꿨습니다."
+        },
+        {
+          "date": "2025.11",
+          "text": "올해도 열흘 늦게 물이 들었습니다."
+        },
+        {
+          "date": "2024.11",
+          "text": "잎이 다른 나무보다 늦게 물들기 시작했습니다."
+        }
+      ]
+    },
+    {
+      "id": "GY-004",
+      "title": "바위를 안은 소나무",
+      "species": "곰솔",
+      "speciesEn": "Black Pine",
+      "since": 1991,
+      "year": 2024,
+      "size": "H 51 × W 47 cm",
+      "status": "Sold",
+      "image": "images/works/gy-004.jpg",
+      "summary": "뿌리가 돌을 감싸고 자랍니다. 돌을 올린 지 열두 해가 지났습니다.",
+      "intent": "돌과 뿌리가 한 몸이 되는 데 필요한 것은 기술보다 시간이었습니다.",
+      "log": [
+        {
+          "date": "2024.05",
+          "text": "새 주인에게 보냈습니다."
+        },
+        {
+          "date": "2019.03",
+          "text": "뿌리가 돌 아래까지 내려갔습니다."
+        },
+        {
+          "date": "2012.04",
+          "text": "돌 위에 올렸습니다."
+        }
+      ]
+    },
+    {
+      "id": "GY-005",
+      "title": "한 가지의 모과",
+      "species": "모과나무",
+      "speciesEn": "Chinese Quince",
+      "since": 2005,
+      "year": 2026,
+      "size": "H 46 × W 36 cm",
+      "status": "Available",
+      "image": "images/works/gy-005.jpg",
+      "summary": "가지를 하나만 남겼습니다. 봄에 꽃이 그 한 가지에만 핍니다.",
+      "intent": "빠르게 완성된 나무보다, 시간이 지나며 좋아지는 나무를 만듭니다.",
+      "sale": {
+        "state": "AVAILABLE",
+        "price": "[확인 필요]",
+        "care": "보통 · 물을 좋아합니다"
+      },
+      "log": [
+        {
+          "date": "2026.08",
+          "text": "여름 가지를 정리했습니다."
+        },
+        {
+          "date": "2026.04",
+          "text": "꽃이 한 가지에만 피었습니다."
+        },
+        {
+          "date": "2023.09",
+          "text": "가지를 하나만 남겼습니다."
+        }
+      ]
+    },
+    {
+      "id": "GY-006",
+      "title": "이른 봄의 매화",
+      "species": "매화",
+      "speciesEn": "Ume",
+      "since": 2001,
+      "year": 2025,
+      "size": "H 40 × W 44 cm",
+      "status": "Private Collection",
+      "image": "images/works/gy-006.jpg",
+      "summary": "줄기 절반이 말라 있습니다. 나머지 절반으로 꽃을 피웁니다.",
+      "intent": "죽은 부분을 숨기지 않았습니다. 마른 줄기가 살아 있는 줄기를 보여 줍니다.",
+      "log": [
+        {
+          "date": "2025.02",
+          "text": "첫 꽃. 지난해보다 엿새 빨랐습니다."
+        },
+        {
+          "date": "2023.06",
+          "text": "마른 줄기의 껍질을 정리했습니다."
+        }
+      ]
+    },
+    {
+      "id": "GY-007",
+      "title": "작은 주목",
+      "species": "주목",
+      "speciesEn": "Yew",
+      "since": 2016,
+      "year": 2026,
+      "size": "H 24 × W 22 cm",
+      "status": "Available",
+      "image": "images/works/gy-007.jpg",
+      "summary": "손바닥 두 개 크기입니다. 책상 위에 두는 나무입니다.",
+      "intent": "작은 나무일수록 한 번의 가위질이 전체를 바꿉니다. 한 해에 두 번만 손을 댑니다.",
+      "sale": {
+        "state": "AVAILABLE",
+        "price": "[확인 필요]",
+        "care": "쉬움 · 그늘에서도 견딥니다"
+      },
+      "log": [
+        {
+          "date": "2026.05",
+          "text": "새순을 정리했습니다. 올해 두 번 중 첫 번째입니다."
+        },
+        {
+          "date": "2024.03",
+          "text": "지금 화분으로 옮겼습니다."
+        }
+      ]
+    },
+    {
+      "id": "GY-008",
+      "title": "강가의 버드나무",
+      "species": "버드나무",
+      "speciesEn": "Willow",
+      "since": 2018,
+      "year": 2026,
+      "size": "H 36 × W 50 cm",
+      "status": "Sold",
+      "image": "images/works/gy-008.jpg",
+      "summary": "가지가 아래로 흐릅니다. 물을 가장 많이 먹는 나무입니다.",
+      "intent": "늘어진 가지의 길이를 맞추지 않았습니다. 바람이 분 방향 그대로 두었습니다.",
+      "sale": {
+        "state": "SOLD",
+        "price": "[확인 필요]",
+        "care": "어려움 · 여름에는 하루 두 번 물을 줍니다"
+      },
+      "log": [
+        {
+          "date": "2026.06",
+          "text": "가지 끝을 정리했습니다."
+        },
+        {
+          "date": "2025.07",
+          "text": "물을 하루 두 번으로 늘렸습니다."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>구매 신청 — GUIYEON</title>
+<meta name="description" content="귀연 작품 구매 신청.">
+<meta name="theme-color" content="#111110">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="inquiry">
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header data-site-head></header>
+<main id="main">
+
+<div class="page-head">
+  <div class="wrap grid">
+    <h1 class="title-lg">구매 신청</h1>
+    <p class="small">신청서를 보내시면 계좌를 안내해 드립니다. 입금이 확인되면 주문이 확정됩니다.</p>
+  </div>
+</div>
+<div class="wrap grid" style="padding-bottom:var(--band)">
+  <aside style="grid-column:1 / span 4" class="inq-work" data-inquiry></aside>
+  <div style="grid-column:6 / span 7" class="inq-form">
+    <form class="form" novalidate>
+      <input type="hidden" name="work">
+      <label><span class="field">이름</span><input name="name" autocomplete="name" placeholder="받으실 분"></label>
+      <label><span class="field">연락처</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="010-0000-0000"></label>
+      <fieldset style="border:0;padding:0;margin:0">
+        <legend class="field" style="margin-bottom:12px">수령 방법</legend>
+        <div class="choice">
+          <label><input type="radio" name="how" value="배송" checked> 배송</label>
+          <label><input type="radio" name="how" value="직접 수령"> 직접 수령 (서울)</label>
+        </div>
+      </fieldset>
+      <label><span class="field">주소</span><input name="address" autocomplete="street-address" placeholder="배송을 고르셨다면 적어 주십시오"></label>
+      <label><span class="field">남기실 말</span><textarea name="note" placeholder="놓을 자리, 선물 여부 등"></textarea></label>
+      <div><button class="btn" type="submit">신청서 보내기</button></div>
+      <p class="small" style="margin:0">보내기를 누르면 메일 앱이 열리고 신청 내용이 채워집니다. 메일을 보내면 신청이 끝납니다.</p>
+    </form>
+    <div class="done" aria-live="polite">
+      <h2 class="title-md" tabindex="-1">신청서를 작성했습니다.</h2>
+      <p class="small" style="margin-top:16px">열린 메일을 보내 주시면 신청이 접수됩니다. 메일 앱이 열리지 않았다면 <a data-mail href="#" style="text-decoration:underline;text-underline-offset:4px">여기를 눌러 다시 여십시오</a>.</p>
+      <div class="notice" style="margin-top:40px">
+        <p class="field">입금 계좌</p>
+        <dl class="facts" data-bank></dl>
+        <p class="small" style="margin-top:24px">입금을 확인하면 연락드리고 주문을 확정합니다. 나무의 상태를 사진으로 한 번 더 보내 드린 뒤에 보냅니다.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+<footer data-site-foot></footer>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

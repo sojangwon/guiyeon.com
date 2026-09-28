@@ -1,0 +1,94 @@
+# Pages CMS 관리 화면 설정 (https://app.pagescms.org)
+media:
+  input: images
+  output: /images
+
+content:
+  - name: works
+    label: 작품 (WORKS · AVAILABLE)
+    type: file
+    path: content/works.json
+    format: json
+    fields:
+      - name: works
+        label: 작품 목록
+        type: object
+        list: true
+        fields:
+          - { name: id, label: "등록번호 (예: GY-009)", type: string, required: true }
+          - { name: title, label: 작품명, type: string, required: true }
+          - { name: species, label: 수종 (한글), type: string }
+          - { name: speciesEn, label: 수종 (영문), type: string }
+          - { name: since, label: 함께한 해 (시작 연도), type: number }
+          - { name: year, label: 제작 연도, type: number }
+          - { name: size, label: "크기 (예: H 42 × W 55 cm)", type: string }
+          - name: status
+            label: 작품 상태 (WORKS 페이지)
+            type: select
+            options:
+              values: [Available, Sold, Private Collection]
+          - { name: image, label: 대표 사진, type: image }
+          - { name: summary, label: 한 줄 설명, type: text }
+          - { name: intent, label: 수형 · 제작 의도, type: text }
+          - name: sale
+            label: 판매 정보 (AVAILABLE 페이지에 나올 때만 채우기)
+            type: object
+            fields:
+              - name: state
+                label: 판매 상태
+                type: select
+                options:
+                  values: [AVAILABLE, RESERVED, SOLD]
+              - { name: price, label: "가격 (예: ₩ 1,200,000)", type: string }
+              - { name: care, label: "관리 난이도 (예: 쉬움 · 볕이 드는 창가)", type: string }
+          - name: log
+            label: 관찰 기록 (최근 것이 위로)
+            type: object
+            list: true
+            fields:
+              - { name: date, label: "날짜 (예: 2026.09)", type: string }
+              - { name: text, label: 기록, type: text }
+
+  - name: journal
+    label: 작업 기록 (JOURNAL)
+    type: file
+    path: content/journal.json
+    format: json
+    fields:
+      - name: journal
+        label: 기록 목록 (최근 것이 위로)
+        type: object
+        list: true
+        fields:
+          - { name: id, label: "주소용 이름 (예: j-2026-10)", type: string, required: true }
+          - { name: date, label: "날짜 (예: 2026.10)", type: string }
+          - { name: tree, label: "나무 (영문, 예: Juniper)", type: string }
+          - { name: treeKo, label: 나무 (한글), type: string }
+          - { name: act, label: "작업 (영문, 예: Wiring)", type: string }
+          - { name: actKo, label: 작업 (한글), type: string }
+          - { name: work, label: "연결할 작품 등록번호 (선택)", type: string }
+          - { name: image, label: 사진, type: image }
+          - name: body
+            label: 문단
+            type: text
+            list: true
+
+  - name: settings
+    label: 사이트 정보 · 연락처 · 계좌
+    type: file
+    path: content/settings.json
+    format: json
+    fields:
+      - { name: instagram, label: Instagram 주소, type: string }
+      - { name: instagramHandle, label: "Instagram 계정 (예: @guiyeon)", type: string }
+      - { name: smartstore, label: 스마트스토어 주소, type: string }
+      - { name: email, label: 문의 메일, type: string }
+      - { name: location, label: 지역 표기, type: string }
+      - name: bank
+        label: 입금 계좌 (구매 신청 후에만 보입니다)
+        type: object
+        fields:
+          - { name: name, label: 은행, type: string }
+          - { name: account, label: 계좌번호, type: string }
+          - { name: holder, label: 예금주, type: string }
+      - { name: notice, label: "맨 아래 안내 문구 (비우면 사라집니다)", type: string }

@@ -1,0 +1,13 @@
+{
+  "instagram": "https://www.instagram.com/",
+  "instagramHandle": "@guiyeon",
+  "smartstore": "https://smartstore.naver.com/",
+  "email": "hello@guiyeon.kr",
+  "location": "Seoul / Korea",
+  "bank": {
+    "name": "[확인 필요] 은행",
+    "account": "[확인 필요] 계좌번호",
+    "holder": "[확인 필요] 예금주"
+  },
+  "notice": "작품 정보와 기록은 현재 예시입니다. 실제 내용으로 교체 예정입니다."
+}
