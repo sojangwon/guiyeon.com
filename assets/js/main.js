@@ -33,6 +33,12 @@
 
   function pad(n) { return (n < 10 ? "0" : "") + n; }
 
+  // 상태 표기: Sold / SOLD 는 화면에서 SOLD OUT 으로 씁니다
+  function stateLabel(v) {
+    var t = String(v || "").toUpperCase();
+    return t === "SOLD" ? "SOLD OUT" : t;
+  }
+
   // 사진 자리: 파일이 있으면 사진이 천천히 나타나고, 없으면 경로가 보입니다
   function plate(src, label, ratio, alt) {
     return (
@@ -67,7 +73,7 @@
       '<span class="work__id">' + esc(w.id) + "</span>" +
       '<span class="work__title">' + esc(w.title) + "</span>" +
       '<span class="work__meta">' + esc(w.speciesEn) + " · " + esc(w.year) + "</span>" +
-      (opts.state ? '<span class="work__state">' + esc(String(state).toUpperCase()) +
+      (opts.state ? '<span class="work__state">' + esc(stateLabel(state)) +
         (opts.price && w.sale ? " · " + txt(w.sale.price) : "") + "</span>" : "") +
       "</div></a>"
     );
@@ -220,7 +226,7 @@
         '<div class="detail-actions">' +
         (st === "AVAILABLE"
           ? '<a class="btn" href="inquiry.html?id=' + esc(w.id) + '">PURCHASE · 구매 문의</a>'
-          : '<span class="btn" aria-disabled="true">' + st + "</span>") +
+          : '<span class="btn" aria-disabled="true">' + stateLabel(st) + "</span>") +
         '<a class="textlink" href="available.html">Available works</a></div>';
     }
 
@@ -245,7 +251,7 @@
       "<div><dt>함께한 해</dt><dd>" + esc(w.since) + " – </dd></div>" +
       "<div><dt>제작 연도</dt><dd>" + esc(w.year) + "</dd></div>" +
       "<div><dt>크기</dt><dd>" + esc(w.size) + "</dd></div>" +
-      "<div><dt>상태</dt><dd>" + esc(String(w.status).toUpperCase()) + "</dd></div>" +
+      "<div><dt>상태</dt><dd>" + esc(stateLabel(w.sale && w.status === "Available" ? w.sale.state : w.status)) + "</dd></div>" +
       (w.sale ? "<div><dt>관리</dt><dd>" + esc(w.sale.care) + "</dd></div>" +
         "<div><dt>가격</dt><dd>" + txt(w.sale.price) + "</dd></div>" : "") +
       "</dl>" +
@@ -317,7 +323,7 @@
         '<article class="piece"><div class="grid">' +
         '<a class="plate-col" href="work.html?id=' + esc(w.id) + '" data-cursor="VIEW">' + plate(w.image, w.id, "r-4x5", w.title) + "</a>" +
         '<div class="info-col">' +
-        '<p class="state state--' + st.toLowerCase() + '">' + st + "</p>" +
+        '<p class="state state--' + st.toLowerCase() + '">' + stateLabel(st) + "</p>" +
         '<h2 class="title-md">' + esc(w.title) + "</h2>" +
         '<dl class="facts">' +
         "<div><dt>등록번호</dt><dd>" + esc(w.id) + "</dd></div>" +
@@ -329,7 +335,7 @@
         '<div class="prose"><p>' + esc(w.summary) + "</p></div>" +
         (st === "AVAILABLE"
           ? '<a class="btn" href="inquiry.html?id=' + esc(w.id) + '">PURCHASE · 구매 문의</a>'
-          : '<span class="btn" aria-disabled="true">' + (st === "RESERVED" ? "RESERVED · 예약 중" : "SOLD · 판매 완료") + "</span>") +
+          : '<span class="btn" aria-disabled="true">' + (st === "RESERVED" ? "RESERVED · 예약 중" : "SOLD OUT · 판매 완료") + "</span>") +
         "</div></div></article>"
       );
     }).join("");
@@ -592,7 +598,7 @@
 
     // 등장: 사진은 아래에서 위로 걷히고, 글은 천천히 떠오릅니다
     var textSel = ".work__cap, .lede p, .band-head, .log li, .chapter, .entry .meta-col, .entry .text-col, .piece .info-col, .page-head .title-lg, .page-head .small, .artist .text-col, .philosophy .register, .steps li, .channels li, .filters";
-    var plateSel = ".selected .plate, .archive .plate, .avail-row .plate, .artist .plate, .piece .plate, .entry .plate, .insta .plate, .about-open .plate";
+    var plateSel = ".selected .plate, .archive .plate, .avail-row .plate, .artist .plate, .piece .plate, .entry .plate, .insta .plate, .about-open .plate, .philosophy__plate, .pair .plate";
     var targets = [];
     document.querySelectorAll(textSel).forEach(function (n) { n.classList.add("reveal"); targets.push(n); });
     document.querySelectorAll(plateSel).forEach(function (n) { n.classList.add("reveal"); targets.push(n); });
@@ -614,7 +620,7 @@
     }
 
     // 깊이: 큰 사진은 글보다 조금 느리게 움직입니다
-    var deep = document.querySelectorAll(".selected .plate, .artist .plate, .piece .plate, .entry .plate, .about-open .plate");
+    var deep = document.querySelectorAll(".selected .plate, .artist .plate, .piece .plate, .entry .plate, .about-open .plate, .philosophy__plate, .pair .plate");
     deep.forEach(function (n) { n.classList.add("parallax"); });
     if (deep.length && window.innerWidth > 720) {
       var ticking = false;

@@ -376,7 +376,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .hero__seal img { display: block; width: 100%; height: auto; }
 /* 첫 화면에서는 머리의 작은 낙관을 감춰 낙관이 한 번만 보이게 합니다 */
-[data-page="home"] .site-head:not(.is-scrolled) .seal-img { opacity: 0; }
 .seal-img { transition: opacity 300ms ease; }
 
 @keyframes press {
@@ -394,8 +393,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* ---------- HOME: 철학 ---------- */
 
-.philosophy .lede { grid-column: 3 / span 8; }
-.philosophy .register { grid-column: 3 / span 8; margin-top: 32px; }
+.philosophy__plate { grid-column: 1 / span 5; align-self: start; }
+.philosophy .lede { grid-column: 7 / span 6; align-self: center; }
+.philosophy .register { grid-column: 7 / span 6; margin-top: 32px; }
 
 /* ---------- 작품 배치 (홈 대표작) ---------- */
 
@@ -962,3 +962,23 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 @media (max-width: 720px) { .seal-img { height: 36px; } }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .btn[disabled] { opacity: 0.5; pointer-events: none; }
+
+/* 첫 화면: 글만 둡니다 */
+.hero { height: min(78svh, 50vw); min-height: 520px; }
+
+/* ABOUT 사진 한 쌍 */
+.pair { padding: clamp(48px, 6vw, 104px) 0; border-top: 1px solid var(--rule); row-gap: 48px; }
+.pair figure { margin: 0; }
+.pair__a { grid-column: 1 / span 5; }
+.pair__b { grid-column: 7 / span 5; margin-top: clamp(48px, 8vw, 140px); }
+.pair__cap { margin-top: 14px; }
+@media (max-width: 960px) {
+  .philosophy__plate, .philosophy .lede, .philosophy .register { grid-column: 1 / -1; }
+  .philosophy__plate { margin-bottom: 40px; }
+}
+@media (max-width: 720px) {
+  .hero { height: auto; min-height: 64svh; }
+  .hero .grid { min-height: 64svh; justify-content: flex-end; }
+  .philosophy__plate { margin: 0 calc(var(--gutter) * -1) 36px; }
+  .pair__a, .pair__b { grid-column: 1 / -1; margin-top: 0; }
+}
