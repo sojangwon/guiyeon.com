@@ -1,3 +1,11 @@
+/* 마루 부리 (네이버 한글 명조). 굵기별 파일을 하나의 이름으로 묶습니다 */
+@font-face { font-family: "GY Serif"; font-weight: 200; font-display: swap;
+  src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff2) format("woff2"); }
+@font-face { font-family: "GY Serif"; font-weight: 300; font-display: swap;
+  src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Light.woff2) format("woff2"); }
+@font-face { font-family: "GY Serif"; font-weight: 400; font-display: swap;
+  src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.woff2) format("woff2"); }
+
 /* GUIYEON — 작가의 수장 기록부
    색과 간격은 맨 위 :root 값만 바꾸면 사이트 전체에 적용됩니다. */
 
@@ -13,13 +21,15 @@
   --rule-card: rgba(28, 27, 25, 0.16);
   --seal: #a9100b;            /* 낙관. 한 곳에만 씁니다 */
 
-  --serif: "Hahmlet", "Nanum Myeongjo", serif;
+  --serif: "GY Serif", "Nanum Myeongjo", serif;
   --sans: "Pretendard Variable", "Pretendard", -apple-system, "Apple SD Gothic Neo", sans-serif;
 
   --gutter: clamp(20px, 4vw, 64px);
   --col-gap: clamp(16px, 2vw, 32px);
   --band: clamp(96px, 14vw, 200px);
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);      /* 느린 등장 */
+  --ease-ui: cubic-bezier(0.23, 1, 0.32, 1);  /* 누르고 가리키는 반응 */
+  --ease-move: cubic-bezier(0.77, 0, 0.175, 1); /* 화면 위의 이동 */
   --slow: 1600ms;
 }
 
@@ -130,6 +140,20 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   text-wrap: balance;
 }
 
+.en {
+  display: block;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-top: 12px;
+  line-height: 1.4;
+}
+.band--card .en { color: var(--stone-card); }
+.title-lg .en { margin-top: 20px; }
+
 .title-md {
   font-family: var(--serif);
   font-weight: 400;
@@ -181,7 +205,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   background: currentColor;
   transform: scaleX(0.5);
   transform-origin: left center;
-  transition: transform 900ms var(--ease);
+  transition: transform 300ms var(--ease-ui);
 }
 .textlink:hover::after,
 .textlink:focus-visible::after { transform: scaleX(1); }
@@ -189,10 +213,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* ---------- 머리 ---------- */
 
 .site-head {
-  position: absolute;
+  position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 20;
+  view-transition-name: site-head;
+  transition: transform 450ms var(--ease-ui), background-color 300ms ease;
 }
+.site-head.is-scrolled { background-color: rgba(17, 17, 16, 0.94); }
+.site-head.is-scrolled .wrap { border-bottom-color: transparent; }
+.site-head.is-hidden { transform: translateY(-100%); }
 .site-head .wrap {
   display: flex;
   align-items: center;
@@ -227,10 +256,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   margin: 0; padding: 0;
 }
 .nav a {
-  font-size: 12px;
-  letter-spacing: 0.18em;
+  font-size: 13px;
+  letter-spacing: 0.16em;
   color: var(--stone);
-  transition: color 600ms var(--ease);
+  transition: color 200ms ease;
   padding: 8px 0;
 }
 .nav a:hover,
@@ -274,7 +303,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   transition: opacity var(--slow) var(--ease), transform 2400ms var(--ease);
 }
 .plate img.is-loaded { opacity: 1; }
-a:hover .plate img.is-loaded { transform: scale(1.015); }
+/* 천천히 움직이는 사진 (스크롤 깊이감) */
+.plate.parallax img { top: -6%; height: 112%; transition: opacity var(--slow) var(--ease); will-change: transform; }
 
 .band--card .plate { background: #e4e0d7; }
 .band--card .plate__label { color: #5f5b53; }
@@ -293,12 +323,12 @@ a:hover .plate img.is-loaded { transform: scale(1.015); }
 
 .band-head {
   display: flex;
-  align-items: baseline;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  padding-bottom: 20px;
+  padding-bottom: 28px;
   border-bottom: 1px solid var(--rule);
-  margin-bottom: clamp(40px, 6vw, 88px);
+  margin-bottom: clamp(56px, 7vw, 112px);
 }
 .band--card .band-head { border-color: var(--rule-card); }
 
@@ -429,7 +459,7 @@ a:hover .plate img.is-loaded { transform: scale(1.015); }
 .site-foot .brand-col { grid-column: 1 / span 6; }
 .site-foot .brand-col .wordmark { font-size: 22px; display: block; margin-bottom: 8px; }
 .site-foot .links-col { grid-column: 8 / span 5; display: flex; flex-direction: column; gap: 4px; }
-.site-foot .links-col a { font-size: 14px; color: var(--stone); padding: 6px 0; transition: color 600ms var(--ease); width: fit-content; }
+.site-foot .links-col a { font-size: 14px; color: var(--stone); padding: 6px 0; transition: color 200ms ease; width: fit-content; }
 .site-foot .links-col a:hover { color: var(--paper); }
 .site-foot .base {
   grid-column: 1 / -1;
@@ -466,7 +496,7 @@ a:hover .plate img.is-loaded { transform: scale(1.015); }
   letter-spacing: 0.16em;
   color: var(--stone);
   padding: 6px 0;
-  transition: color 600ms var(--ease);
+  transition: color 200ms ease;
 }
 .filters button[aria-pressed="true"] { color: var(--paper); text-decoration: underline; text-underline-offset: 8px; text-decoration-thickness: 1px; }
 .filters button:hover { color: var(--paper); }
@@ -554,7 +584,7 @@ a:hover .plate img.is-loaded { transform: scale(1.015); }
   border-top: 1px solid var(--rule);
   margin-top: clamp(80px, 10vw, 160px);
 }
-.pager a { font-size: 13px; color: var(--stone); transition: color 600ms var(--ease); }
+.pager a { font-size: 13px; color: var(--stone); transition: color 200ms ease; }
 .pager a:hover { color: var(--paper); }
 .pager b { display: block; font-family: var(--serif); font-weight: 400; font-size: 18px; color: var(--paper); margin-top: 4px; }
 
@@ -603,8 +633,9 @@ a:hover .plate img.is-loaded { transform: scale(1.015); }
   border: 1px solid var(--paper);
   font-size: 12px;
   letter-spacing: 0.18em;
-  transition: background 700ms var(--ease), color 700ms var(--ease);
+  transition: background-color 220ms ease, color 220ms ease, transform 160ms var(--ease-ui);
 }
+.btn:active { transform: scale(0.97); }
 .btn:hover { background: var(--paper); color: var(--ink-ground); }
 .btn[aria-disabled="true"] { border-color: var(--rule); color: var(--stone); pointer-events: none; }
 .band--card .btn { border-color: var(--card-ink); }
@@ -728,8 +759,7 @@ a:hover .plate img.is-loaded { transform: scale(1.015); }
   .nav.is-open { opacity: 1; visibility: visible; transition: opacity 700ms var(--ease); }
   .nav ul { flex-direction: column; gap: 4px; }
   .nav a { font-family: var(--serif); font-size: 30px; letter-spacing: 0.06em; color: var(--paper); display: block; padding: 10px 0; }
-  .site-head { position: absolute; }
-  .site-head.is-open { position: fixed; }
+  .site-head.is-open { transform: none; background-color: var(--ink-ground); }
   .brand, .menu-btn { position: relative; z-index: 2; }
 
   .hero { height: auto; min-height: 0; max-height: none; }
@@ -772,3 +802,122 @@ a:hover .plate img.is-loaded { transform: scale(1.015); }
   .inq-work, .inq-form { grid-column: 1 / -1 !important; }
   .inq-work { max-width: 360px; margin-bottom: 56px; }
 }
+
+/* ---------- 스크롤 등장 ---------- */
+/* 스크립트가 켜진 경우에만 숨겼다가 천천히 드러냅니다 */
+
+.js .reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1200ms var(--ease), transform 1400ms var(--ease);
+}
+.js .reveal.is-in { opacity: 1; transform: none; }
+
+.js .plate.reveal {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1600ms var(--ease-move);
+}
+.js .plate.reveal.is-in { clip-path: inset(0 0 0 0); }
+
+/* ---------- 커서 ---------- */
+
+.cursor {
+  position: fixed;
+  left: 0; top: 0;
+  z-index: 60;
+  pointer-events: none;
+  will-change: transform;
+}
+.cursor span {
+  display: grid;
+  place-items: center;
+  width: 88px; height: 88px;
+  margin: -44px 0 0 -44px;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink-ground);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 220ms ease, transform 320ms var(--ease-ui);
+}
+.cursor.is-on span { opacity: 1; transform: scale(1); }
+@media (hover: hover) and (pointer: fine) {
+  .has-cursor [data-cursor] { cursor: none; }
+}
+
+/* ---------- 페이지 전환 ---------- */
+
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: vt-out 360ms var(--ease-ui) both; }
+::view-transition-new(root) { animation: vt-in 800ms var(--ease) 60ms both; }
+::view-transition-group(work-plate) { animation-duration: 900ms; animation-timing-function: var(--ease-move); }
+::view-transition-old(work-plate),
+::view-transition-new(work-plate) { animation-duration: 900ms; height: 100%; object-fit: cover; }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(14px); } }
+
+/* ---------- 작품 감상 모드 ---------- */
+
+.detail-plate-btn { display: block; width: 100%; cursor: zoom-in; }
+.viewer {
+  width: 100vw; height: 100dvh;
+  max-width: none; max-height: none;
+  margin: 0; padding: 0;
+  border: 0;
+  background: #0b0b0a;
+  color: var(--paper);
+  opacity: 0;
+  transition: opacity 280ms ease, display 280ms allow-discrete, overlay 280ms allow-discrete;
+}
+.viewer[open] { opacity: 1; }
+@starting-style { .viewer[open] { opacity: 0; } }
+.viewer::backdrop { background: #0b0b0a; }
+.viewer__stage {
+  position: absolute;
+  inset: 72px var(--gutter) 88px;
+  display: grid;
+  place-items: center;
+}
+.viewer__stage img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: opacity 360ms ease, filter 360ms ease, transform 500ms var(--ease-ui);
+}
+.viewer__stage img.is-swapping { opacity: 0; filter: blur(6px); transform: scale(0.985); }
+.viewer__empty { font-size: 13px; color: var(--stone); text-align: center; line-height: 1.8; }
+.viewer__bar {
+  position: absolute;
+  left: var(--gutter); right: var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+.viewer__bar--top { top: 20px; }
+.viewer__bar--bottom { bottom: 24px; }
+.viewer button {
+  padding: 12px 0;
+  color: var(--stone);
+  letter-spacing: 0.16em;
+  transition: color 200ms ease, transform 160ms var(--ease-ui);
+}
+.viewer button:hover { color: var(--paper); }
+.viewer button:active { transform: scale(0.97); }
+.viewer button[disabled] { visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal, .js .plate.reveal { opacity: 1; transform: none; clip-path: none; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+/* ---------- 낙관 (로고) ---------- */
+.seal-img { display: block; height: 46px; width: auto; }
+.seal-foot { display: block; height: 64px; width: auto; margin-bottom: 28px; }
+.name-seal { display: block; width: clamp(120px, 14vw, 200px); height: auto; margin-top: 32px; }
+@media (max-width: 720px) { .seal-img { height: 36px; } }

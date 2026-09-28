@@ -28,6 +28,7 @@ content:
             options:
               values: [Available, Sold, Private Collection]
           - { name: image, label: 대표 사진, type: image }
+          - { name: gallery, label: "추가 사진 (감상 모드에서 넘겨 봅니다: 옆모습·뒷모습·계절)", type: image, list: true }
           - { name: summary, label: 한 줄 설명, type: text }
           - { name: intent, label: 수형 · 제작 의도, type: text }
           - name: sale

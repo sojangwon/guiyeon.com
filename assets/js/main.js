@@ -61,7 +61,7 @@
     opts = opts || {};
     var state = w.sale && w.status === "Available" ? w.sale.state : w.status;
     return (
-      '<a class="work" href="work.html?id=' + esc(w.id) + '" data-status="' + esc(w.status) + '">' +
+      '<a class="work" href="work.html?id=' + esc(w.id) + '" data-status="' + esc(w.status) + '" data-cursor="VIEW">' +
       plate(w.image, w.id, opts.ratio || "r-4x5", w.title + " — " + w.species) +
       '<div class="work__cap">' +
       '<span class="work__id">' + esc(w.id) + "</span>" +
@@ -89,7 +89,7 @@
     head.innerHTML =
       '<div class="wrap">' +
       '<a class="brand" href="index.html" aria-label="GUIYEON 귀연 처음으로">' +
-      '<span class="wordmark">GUIYEON</span><span class="seal" aria-hidden="true">龜蓮</span></a>' +
+      '<span class="wordmark">GUIYEON</span><img class="seal-img" src="images/brand/seal-160.png" alt="" width="22" height="34"></a>' +
       '<button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">MENU</button>' +
       '<nav class="nav" id="site-nav" aria-label="주 메뉴"><ul>' +
       NAV.map(function (n) {
@@ -117,7 +117,7 @@
     foot.className = "site-foot";
     foot.innerHTML =
       '<div class="wrap grid">' +
-      '<div class="brand-col"><span class="wordmark">GUIYEON</span>' +
+      '<div class="brand-col"><img class="seal-foot" src="images/brand/seal-160.png" alt="귀연 낙관" width="41" height="64"><span class="wordmark">GUIYEON</span>' +
       '<p class="field" style="margin:0">Bonsai Artist · 귀연</p>' +
       '<p class="field" style="margin:0">' + esc(S.location) + "</p></div>" +
       '<div class="links-col">' +
@@ -205,8 +205,9 @@
     var next = D.works[(idx + 1) % D.works.length];
     document.title = w.title + " — GUIYEON";
 
+    var logs = w.log || [];
     var years = [];
-    w.log.forEach(function (l) {
+    logs.forEach(function (l) {
       var y = l.date.slice(0, 4);
       if (years.indexOf(y) < 0) years.push(y);
     });
@@ -224,10 +225,18 @@
     }
 
     var el = document.querySelector("[data-detail]");
-    el.innerHTML =
-      '<div class="wrap grid">' +
-      '<div class="plate-col" data-plate>' + plate(w.image, w.id, "", w.title + " — " + w.species) + "</div>" +
-      '<div class="info-col">' +
+    var grid = el.querySelector("[data-detail-grid]");
+    var plateCol = el.querySelector("[data-plate]");
+    var fig = el.querySelector("#detail-plate");
+    var figImg = fig.querySelector("img");
+
+    // 사진 자리: 목록에서 넘어올 때 이미 사진이 들어와 있으면 그대로 이어서 씁니다
+    fig.querySelector(".plate__label").innerHTML = "<b>" + esc(w.id) + "</b>" + esc(w.image);
+    figImg.alt = w.title + " — " + w.species;
+    if (figImg.getAttribute("src") !== w.image) figImg.src = w.image;
+    try { sessionStorage.removeItem("gy-vt-img"); } catch (e) {}
+
+    el.querySelector("[data-info]").innerHTML =
       '<p class="field pos">' + esc(w.id) + " · " + pad(idx + 1) + " / " + pad(D.works.length) + "</p>" +
       '<p class="field" style="margin:0">' + esc(w.speciesEn) + "</p>" +
       '<h1 class="title-lg">' + esc(w.title) + "</h1>" +
@@ -242,25 +251,34 @@
       "</dl>" +
       '<div class="prose"><p>' + esc(w.summary) + "</p><p>" + esc(w.intent) + "</p></div>" +
       saleHtml +
-      '<p class="field" style="margin:64px 0 0">관찰 기록</p>' +
-      '<div class="years" role="group" aria-label="연도별 기록">' +
-      years.map(function (y) {
-        return '<button type="button" data-year="' + y + '" aria-pressed="false">' + y + "</button>";
-      }).join("") +
-      "</div>" +
-      '<ol class="observe">' +
-      w.log.map(function (l, i) {
-        return '<li data-age="' + Math.min(i, 3) + '" data-year="' + l.date.slice(0, 4) + '"><time>' +
-          esc(l.date) + "</time><span>" + esc(l.text) + "</span></li>";
-      }).join("") +
-      "</ol></div>" +
+      (logs.length ?
+        '<p class="field" style="margin:64px 0 0">관찰 기록</p>' +
+        '<div class="years" role="group" aria-label="연도별 기록">' +
+        years.map(function (y) {
+          return '<button type="button" data-year="' + y + '" aria-pressed="false">' + y + "</button>";
+        }).join("") +
+        "</div>" +
+        '<ol class="observe">' +
+        logs.map(function (l, i) {
+          return '<li data-age="' + Math.min(i, 3) + '" data-year="' + esc(l.date).slice(0, 4) + '"><time>' +
+            esc(l.date) + "</time><span>" + esc(l.text) + "</span></li>";
+        }).join("") +
+        "</ol>" : "");
+
+    grid.insertAdjacentHTML("beforeend",
       '<nav class="pager" aria-label="다른 작품" style="grid-column:1 / -1">' +
       '<a href="work.html?id=' + esc(prev.id) + '">이전 작품<b>' + esc(prev.title) + "</b></a>" +
       '<a href="work.html?id=' + esc(next.id) + '" style="text-align:right">다음 작품<b>' + esc(next.title) + "</b></a>" +
-      "</nav></div>";
+      "</nav>");
+
+    // 감상 모드: 대표 사진과 추가 사진(gallery)을 크게 넘겨 봅니다
+    var shots = [w.image].concat(w.gallery || []).filter(Boolean);
+    var current = 0;
+    plateCol.querySelector(".detail-plate-btn").addEventListener("click", function () {
+      openViewer(shots, current, w.title);
+    });
 
     // 연도 띠: 해를 고르면 그해 기록이 진해지고, 그해 사진(gy-001-2023.jpg)이 있으면 바뀝니다
-    var plateCol = el.querySelector("[data-plate]");
     var yBtns = el.querySelectorAll(".years button");
     yBtns.forEach(function (b) {
       b.addEventListener("click", function () {
@@ -273,8 +291,11 @@
         var src = again ? w.image : w.image.replace(/(\.\w+)$/, "-" + y + "$1");
         var probe = new Image();
         probe.onload = function () {
-          plateCol.innerHTML = plate(src, w.id + " · " + y, "", w.title + " " + y);
-          wirePlates(plateCol);
+          figImg.classList.remove("is-loaded");
+          setTimeout(function () {
+            figImg.src = src;
+            figImg.classList.add("is-loaded");
+          }, 300);
         };
         probe.src = src;
       });
@@ -294,7 +315,7 @@
       var st = w.sale.state;
       return (
         '<article class="piece"><div class="grid">' +
-        '<a class="plate-col" href="work.html?id=' + esc(w.id) + '">' + plate(w.image, w.id, "r-4x5", w.title) + "</a>" +
+        '<a class="plate-col" href="work.html?id=' + esc(w.id) + '" data-cursor="VIEW">' + plate(w.image, w.id, "r-4x5", w.title) + "</a>" +
         '<div class="info-col">' +
         '<p class="state state--' + st.toLowerCase() + '">' + st + "</p>" +
         '<h2 class="title-md">' + esc(w.title) + "</h2>" +
@@ -425,5 +446,178 @@
   }
 
   wirePlates();
+  motion();
+  }
+
+  /* ---------- 감상 모드 ---------- */
+
+  var viewer;
+  function openViewer(list, start, title) {
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+    function esc(t) { var d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
+    if (!viewer) {
+      viewer = document.createElement("dialog");
+      viewer.className = "viewer";
+      viewer.setAttribute("aria-label", "작품 사진");
+      viewer.innerHTML =
+        '<div class="viewer__bar viewer__bar--top"><span class="field" data-v-title></span>' +
+        '<button type="button" data-v-close>CLOSE</button></div>' +
+        '<div class="viewer__stage" data-v-stage></div>' +
+        '<div class="viewer__bar viewer__bar--bottom"><button type="button" data-v-prev>PREV</button>' +
+        '<span class="field" data-v-count></span><button type="button" data-v-next>NEXT</button></div>';
+      document.body.appendChild(viewer);
+      viewer.querySelector("[data-v-close]").addEventListener("click", function () { viewer.close(); });
+      viewer.addEventListener("click", function (e) { if (e.target === viewer || e.target.hasAttribute("data-v-stage")) viewer.close(); });
+      viewer.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight") viewer.go(1);
+        if (e.key === "ArrowLeft") viewer.go(-1);
+      });
+      viewer.querySelector("[data-v-prev]").addEventListener("click", function () { viewer.go(-1); });
+      viewer.querySelector("[data-v-next]").addEventListener("click", function () { viewer.go(1); });
+      // 휴대폰: 좌우로 밀어서 넘기기
+      var sx = null;
+      viewer.addEventListener("pointerdown", function (e) { sx = e.clientX; });
+      viewer.addEventListener("pointerup", function (e) {
+        if (sx === null) return;
+        var dx = e.clientX - sx; sx = null;
+        if (Math.abs(dx) > 50) viewer.go(dx < 0 ? 1 : -1);
+      });
+    }
+    var i = start || 0;
+    function show(first) {
+      var stage = viewer.querySelector("[data-v-stage]");
+      var src = list[i];
+      var img = new Image();
+      img.alt = title + " " + (i + 1);
+      img.onload = function () {
+        var old = stage.querySelector("img");
+        if (old && !first) {
+          old.classList.add("is-swapping");
+          setTimeout(function () { stage.innerHTML = ""; img.classList.add("is-swapping"); stage.appendChild(img); requestAnimationFrame(function () { requestAnimationFrame(function () { img.classList.remove("is-swapping"); }); }); }, 300);
+        } else { stage.innerHTML = ""; stage.appendChild(img); }
+      };
+      img.onerror = function () {
+        stage.innerHTML = '<p class="viewer__empty">사진 준비 중<br>' + esc(src) + "</p>";
+      };
+      img.src = src;
+      viewer.querySelector("[data-v-count]").textContent = pad(i + 1) + " / " + pad(list.length);
+      viewer.querySelector("[data-v-prev]").disabled = i === 0;
+      viewer.querySelector("[data-v-next]").disabled = i === list.length - 1;
+    }
+    viewer.go = function (d) {
+      var n = i + d;
+      if (n < 0 || n >= list.length) return;
+      i = n; show(false);
+    };
+    viewer.querySelector("[data-v-title]").textContent = title;
+    show(true);
+    viewer.showModal();
+  }
+
+  /* ---------- 움직임: 머리, 커서, 등장, 깊이, 전환 ---------- */
+
+  function motion() {
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    // 머리: 내려가면 숨고, 올리면 나타납니다
+    var head = document.querySelector(".site-head");
+    var lastY = window.scrollY;
+    function onScroll() {
+      var y = window.scrollY;
+      if (head && !head.classList.contains("is-open")) {
+        head.classList.toggle("is-scrolled", y > 40);
+        head.classList.toggle("is-hidden", y > 240 && y > lastY + 2);
+        if (y < lastY - 2) head.classList.remove("is-hidden");
+      }
+      lastY = y;
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    // 페이지 전환: 누른 작품 사진이 상세 페이지 사진으로 이어집니다
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest('a[href^="work.html"]');
+      if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      var p = a.querySelector(".plate");
+      if (!p) return;
+      document.querySelectorAll("[style*='work-plate']").forEach(function (n) { if (n !== p) n.style.viewTransitionName = ""; });
+      p.style.viewTransitionName = "work-plate";
+      var im = p.querySelector("img.is-loaded");
+      try { if (im) sessionStorage.setItem("gy-vt-img", im.getAttribute("src")); else sessionStorage.removeItem("gy-vt-img"); } catch (err) {}
+    });
+
+    if (reduce) return;
+
+    // 등장: 사진은 아래에서 위로 걷히고, 글은 천천히 떠오릅니다
+    var textSel = ".work__cap, .lede p, .band-head, .log li, .chapter, .entry .meta-col, .entry .text-col, .piece .info-col, .page-head .title-lg, .page-head .small, .artist .text-col, .philosophy .register, .steps li, .channels li, .filters";
+    var plateSel = ".selected .plate, .archive .plate, .avail-row .plate, .artist .plate, .piece .plate, .entry .plate, .insta .plate, .about-open .plate";
+    var targets = [];
+    document.querySelectorAll(textSel).forEach(function (n) { n.classList.add("reveal"); targets.push(n); });
+    document.querySelectorAll(plateSel).forEach(function (n) { n.classList.add("reveal"); targets.push(n); });
+    if ("IntersectionObserver" in window) {
+      var batch = 0, timer;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          io.unobserve(en.target);
+          en.target.style.transitionDelay = Math.min(batch++, 5) * 90 + "ms";
+          en.target.classList.add("is-in");
+        });
+        clearTimeout(timer);
+        timer = setTimeout(function () { batch = 0; }, 120);
+      }, { rootMargin: "0px 0px -8% 0px" });
+      targets.forEach(function (n) { io.observe(n); });
+    } else {
+      targets.forEach(function (n) { n.classList.add("is-in"); });
+    }
+
+    // 깊이: 큰 사진은 글보다 조금 느리게 움직입니다
+    var deep = document.querySelectorAll(".selected .plate, .artist .plate, .piece .plate, .entry .plate, .about-open .plate");
+    deep.forEach(function (n) { n.classList.add("parallax"); });
+    if (deep.length && window.innerWidth > 720) {
+      var ticking = false;
+      function drift() {
+        var vh = window.innerHeight;
+        deep.forEach(function (n) {
+          var r = n.getBoundingClientRect();
+          if (r.bottom < 0 || r.top > vh) return;
+          var t = (r.top + r.height / 2 - vh / 2) / vh;
+          var img = n.querySelector("img");
+          if (img) img.style.transform = "translate3d(0," + (t * -5).toFixed(2) + "%,0)";
+        });
+        ticking = false;
+      }
+      window.addEventListener("scroll", function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(drift); }
+      }, { passive: true });
+      drift();
+    }
+
+    // 커서: 사진 위에서는 VIEW 글자가 따라옵니다
+    if (fine) {
+      document.documentElement.classList.add("has-cursor");
+      var cur = document.createElement("div");
+      cur.className = "cursor";
+      cur.setAttribute("aria-hidden", "true");
+      cur.innerHTML = "<span></span>";
+      document.body.appendChild(cur);
+      var label = cur.querySelector("span");
+      var tx = -200, ty = -200, cx = tx, cy = ty, running = false;
+      function loop() {
+        cx += (tx - cx) * 0.18;
+        cy += (ty - cy) * 0.18;
+        cur.style.transform = "translate3d(" + cx.toFixed(1) + "px," + cy.toFixed(1) + "px,0)";
+        if (Math.abs(tx - cx) > 0.1 || Math.abs(ty - cy) > 0.1) requestAnimationFrame(loop); else running = false;
+      }
+      document.addEventListener("pointermove", function (e) {
+        tx = e.clientX; ty = e.clientY;
+        var t = e.target.closest && e.target.closest("[data-cursor]");
+        if (t) { label.textContent = t.getAttribute("data-cursor"); cur.classList.add("is-on"); }
+        else cur.classList.remove("is-on");
+        if (!running) { running = true; requestAnimationFrame(loop); }
+      }, { passive: true });
+      document.addEventListener("pointerleave", function () { cur.classList.remove("is-on"); });
+    }
   }
 })();
